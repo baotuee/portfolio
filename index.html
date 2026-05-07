@@ -522,58 +522,7 @@
   }
   .exp-achievements li strong { color: var(--text); font-weight: 500; }
 
-  /* Tools section */
-  .tools-section { background: var(--bg); }
-
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 12px;
-  }
-  .tool-pill {
-    background: var(--card);
-    border: 1px solid var(--border);
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-radius: 2px;
-    transition: all 0.2s;
-    cursor: default;
-  }
-  .tool-pill:hover {
-    border-color: var(--border-hover);
-    background: var(--bg3);
-  }
-  .tool-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .tool-dot.paid { background: var(--accent); }
-  .tool-dot.analytics { background: var(--accent2); }
-  .tool-dot.platform { background: #0284c7; }
-  .tool-dot.other { background: #7c3aed; }
-
-  .tool-name {
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 400;
-    white-space: nowrap;
-  }
-
-  .tools-legend {
-    display: flex; gap: 24px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-  .legend-item {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12px; color: var(--muted);
-    font-family: var(--font-mono);
-  }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-
+  
   /* Contact */
   .contact-section {
     background: var(--bg2);
