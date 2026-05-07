@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truong Bao Tue — Performance Marketing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --bg2: #eceae4;
+    --bg3: #e3e0d9;
+    --card: #f9f7f4;
+    --accent: #1a1a2e;
+    --accent2: #d4450c;
+    --text: #1a1814;
+    --muted: #8a8780;
+    --border: rgba(26,24,20,0.1);
+    --border-hover: rgba(26,26,46,0.4);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(26,26,46,0.35);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+  }
+  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 14px; height: 14px; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 48px; height: 48px; border-color: var(--accent); }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(245,242,237,0.97) 0%, transparent 100%);
+    backdrop-filter: blur(0px);
+  }
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    border: 1px solid var(--border-hover);
+    color: var(--accent);
+    padding: 8px 20px;
+    border-radius: 2px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 48px 80px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(26,26,46,0.04) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 9vw, 128px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .hero-name span { color: var(--accent); }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 48px);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+
+  .hero-right {
+    padding-bottom: 20px;
+  }
+
+  .hero-bio {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 520px;
+    margin-bottom: 40px;
+  }
+  .hero-bio strong { color: var(--text); font-weight: 500; }
+
+  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .btn-primary:hover { background: #2a2a4a; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: none;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+  .btn-outline:hover { border-color: var(--border-hover); color: var(--accent); }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px; left: 48px;
+    display: flex; align-items: center; gap: 12px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 60px; height: 1px;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--accent);
+    animation: scan 2s ease-in-out infinite;
+  }
+  @keyframes scan { to { left: 100%; } }
+
+  /* Section base */
+  section {
+    padding: 100px 48px;
+  }
+
+  .section-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 68px);
+    letter-spacing: 0.03em;
+    line-height: 0.95;
+    margin-bottom: 60px;
+    color: var(--text);
+  }
+
+  /* Metrics marquee */
+  .metrics-strip {
+    background: var(--accent);
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex; gap: 0;
+    animation: marquee 23.3s linear infinite;
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 32px;
+    font-family: var(--font-display);
+    font-size: 18px;
+    color: #f5f2ed;
+    letter-spacing: 0.06em;
+  }
+  .marquee-dot { width: 6px; height: 6px; background: rgba(245,242,237,0.4); border-radius: 50%; flex-shrink: 0; }
+
+  /* Skills */
+  .skills-section { background: var(--bg2); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-card {
+    background: var(--bg2);
+    padding: 28px 24px;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0%; height: 2px;
+    background: var(--accent);
+    transition: width 0.3s ease;
+  }
+  .skill-card:hover::before { width: 100%; }
+  .skill-card:hover { background: var(--bg3); }
+
+  .skill-category {
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    margin-bottom: 12px;
+  }
+  .skill-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .skill-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .skill-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  /* Case Studies */
+  .case-section { background: var(--bg); }
+
+  .case-grid { display: grid; gap: 2px; }
+
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: stretch;
+    transition: border-color 0.2s;
+    overflow: hidden;
+    position: relative;
+  }
+  .case-card:hover { border-color: rgba(232,255,71,0.2); }
+  .case-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0%;
+    background: var(--accent);
+    transition: height 0.4s ease;
+  }
+  .case-card:hover::after { height: 100%; }
+
+  .case-num {
+    padding: 32px 28px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .case-number {
+    font-family: var(--font-display);
+    font-size: 56px;
+    color: rgba(240,237,232,0.06);
+    line-height: 1;
+  }
+  .case-industry {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+  }
+
+  .case-body { padding: 32px 36px; }
+  .case-title {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    color: var(--text);
+    margin-bottom: 12px;
+    text-align: left;
+    cursor: none;
+    transition: color 0.2s;
+  }
+  .case-title:hover { color: var(--accent2); }
+  .case-period {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .case-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    max-width: 480px;
+  }
+  .case-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+  .case-card:hover .tag { border-color: rgba(232,255,71,0.2); color: var(--accent); }
+
+  .case-metrics {
+    padding: 32px 24px;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+  }
+  .metric-row { }
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+  .metric-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 2px;
+    font-family: var(--font-mono);
+  }
+
+  /* Experience */
+  .exp-section { background: var(--bg2); }
+
+  .exp-timeline { position: relative; }
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .exp-item {
+    padding-left: 48px;
+    padding-bottom: 56px;
+    position: relative;
+  }
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: 6px;
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+  .exp-item:last-child { padding-bottom: 0; }
+
+  .exp-header { margin-bottom: 16px; }
+  .exp-company {
+    font-family: var(--font-display);
+    font-size: 28px;
+    letter-spacing: 0.04em;
+    color: var(--text);
+  }
+  .exp-role {
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+  }
+  .exp-period {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: var(--font-mono);
+  }
+  .exp-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+  .exp-achievements { list-style: none; }
+  .exp-achievements li {
+    font-size: 13px;
+    color: var(--muted);
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.6;
+  }
+  .exp-achievements li:last-child { border-bottom: none; }
+  .exp-achievements li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+  .exp-achievements li strong { color: var(--text); font-weight: 500; }
+
+  /* Tools section */
+  .tools-section { background: var(--bg); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  .tool-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 2px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tool-pill:hover {
+    border-color: var(--border-hover);
+    background: var(--bg3);
+  }
+  .tool-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tool-dot.paid { background: var(--accent); }
+  .tool-dot.analytics { background: var(--accent2); }
+  .tool-dot.platform { background: #0284c7; }
+  .tool-dot.other { background: #7c3aed; }
+
+  .tool-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  .tools-legend {
+    display: flex; gap: 24px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* Contact */
+  .contact-section {
+    background: var(--bg2);
+    text-align: center;
+    padding: 120px 48px;
+  }
+  .contact-section .section-tag { justify-content: center; }
+  .contact-section .section-tag::before { display: none; }
+  .contact-eyebrow {
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 440px;
+    margin: 0 auto 48px;
+    line-height: 1.7;
+  }
+  .contact-links {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 80px;
+  }
+  .contact-link {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    padding: 12px 24px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .contact-link:hover {
+    border-color: var(--border-hover);
+    color: var(--accent);
+  }
+
+  /* Footer */
+  footer {
+    padding: 24px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .footer-text {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  /* Reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: all 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Responsive */
+  @media (max-width: 760px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 80px; }
+    .hero-right { margin-top: 40px; }
+    section { padding: 72px 24px; }
+    .case-card { grid-template-columns: 1fr; }
+    .case-num { border-right: none; border-bottom: 1px solid var(--border); padding: 20px 24px; flex-direction: row; align-items: center; }
+    .case-metrics { border-left: none; border-top: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; gap: 16px; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+  }
+
+  
+  /* ── View Detail button on card ── */
+  .case-view-btn {
+    display: inline-flex; align-items: center; gap: 8px; margin-top: 20px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    background: none; border: none; border-bottom: 1px solid rgba(26,26,46,0.35);
+    padding-bottom: 3px; cursor: none; transition: gap 0.2s, opacity 0.2s, border-color 0.2s;
+    opacity: 0.55;
+  }
+  .case-card:hover .case-view-btn { opacity: 1; gap: 14px; border-color: var(--accent); }
+  .case-view-btn .arr { transition: transform 0.2s; display: inline-block; }
+  .case-card:hover .case-view-btn .arr { transform: translateX(4px); }
+
+  /* ── Modal backdrop ── */
+  .modal-backdrop {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(26,24,20,0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    pointer-events: none;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .modal-backdrop.open {
+    background: rgba(26,24,20,0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: all;
+  }
+
+  /* ── Modal box ── */
+  .modal {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    width: 100%;
+    max-width: 920px;
+    max-height: 88vh;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.93) translateY(16px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease;
+    position: relative;
+  }
+  .modal-backdrop.open .modal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  /* ── Modal sticky header ── */
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .modal-header-left { display: flex; align-items: center; gap: 14px; }
+  .modal-case-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 0.16em; }
+  .modal-badge {
+    font-family: var(--font-mono); font-size: 10px; color: var(--accent);
+    background: rgba(26,26,46,0.07); border: 1px solid rgba(26,26,46,0.14);
+    padding: 3px 11px; border-radius: 2px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .modal-close {
+    width: 34px; height: 34px;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; transition: background 0.18s;
+    flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--accent); }
+  .modal-close:hover .x-line { stroke: var(--bg); }
+  .x-line { stroke: var(--text); transition: stroke 0.18s; }
+
+  /* ── Scrollable body ── */
+  .modal-body {
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-body::-webkit-scrollbar { width: 4px; }
+  .modal-body::-webkit-scrollbar-track { background: transparent; }
+  .modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── Hero strip ── */
+  .modal-hero {
+    background: var(--accent);
+    padding: 40px 36px 36px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: end;
+    flex-shrink: 0;
+  }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: 0.03em; line-height: 0.92;
+    color: var(--bg);
+    margin-bottom: 12px;
+  }
+  .modal-subtitle { font-size: 13px; color: rgba(245,242,237,0.6); line-height: 1.7; max-width: 420px; }
+  .modal-period {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(245,242,237,0.55);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+  .modal-kpi-strip {
+    display: flex; flex-direction: column; gap: 12px;
+    align-items: flex-end; flex-shrink: 0;
+  }
+  .modal-kpi-item { text-align: right; }
+  .modal-kpi-val { font-family: var(--font-display); font-size: 36px; color: rgba(245,242,237,0.9); letter-spacing: 0.04em; line-height: 1; }
+  .modal-kpi-lbl { font-family: var(--font-mono); font-size: 10px; color: rgba(245,242,237,0.45); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+
+  /* ── Two-column content grid ── */
+  .modal-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    flex: 1;
+  }
+  .modal-col { padding: 32px 28px; }
+  .modal-col + .modal-col { border-left: 1px solid var(--border); }
+
+  .modal-section { margin-bottom: 36px; }
+  .modal-section:last-child { margin-bottom: 0; }
+  .modal-section-label {
+    font-family: var(--font-mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .modal-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .modal-text { font-size: 13px; color: var(--muted); line-height: 1.85; }
+  .modal-text strong { color: var(--text); font-weight: 500; }
+
+  /* Steps */
+  .modal-steps { list-style: none; }
+  .modal-step { display: grid; grid-template-columns: 36px 1fr; border-top: 1px solid var(--border); padding: 12px 0; gap: 4px; }
+  .modal-step:last-child { border-bottom: 1px solid var(--border); }
+  .modal-step-num { font-family: var(--font-mono); font-size: 10px; color: var(--muted); padding-top: 2px; }
+  .modal-step-text { font-size: 12px; color: var(--text); line-height: 1.7; }
+  .modal-step-text strong { color: var(--accent2); font-weight: 500; }
+
+  /* Results */
+  .modal-results { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .modal-result { background: var(--card); padding: 16px; }
+  .modal-result-label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .modal-result-val { font-family: var(--font-display); font-size: 28px; color: var(--accent); letter-spacing: 0.04em; line-height: 1; }
+  .modal-result-delta { font-size: 11px; font-family: var(--font-mono); margin-top: 4px; }
+  .delta-up { color: #16a34a; }
+  .delta-down { color: #d4450c; }
+  .delta-neutral { color: var(--muted); }
+
+  /* Platforms */
+  .modal-platforms { display: flex; flex-wrap: wrap; gap: 7px; }
+  .platform-tag { font-family: var(--font-mono); font-size: 11px; color: var(--text); background: var(--bg3); border: 1px solid var(--border); padding: 5px 12px; border-radius: 2px; letter-spacing: 0.06em; }
+
+  /* Responsive: collapse 2-col to 1-col on small screens */
+  @media (max-width: 680px) {
+    .modal-hero { grid-template-columns: 1fr; }
+    .modal-kpi-strip { flex-direction: row; align-items: flex-start; }
+    .modal-kpi-item { text-align: left; }
+    .modal-content { grid-template-columns: 1fr; }
+    .modal-col + .modal-col { border-left: none; border-top: 1px solid var(--border); }
+    .modal-backdrop { padding: 0; align-items: flex-end; }
+    .modal { max-height: 92vh; border-radius: 4px 4px 0 0; }
+  }
+
+  /* ── Modal image gallery ── */
+  .modal-gallery-section {
+    margin-top: 36px;
+  }
+  .modal-gallery-label {
+    font-family: var(--font-mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+  }
+  .modal-gallery-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+  }
+  .gallery-item {
+    position: relative;
+    aspect-ratio: 16/10;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .gallery-item:hover { border-color: rgba(26,26,46,0.3); transform: scale(1.01); }
+  .gallery-item img { width: 100%; height: 100%; object-fit: contain; display: block; background: var(--bg2); }
+  .gallery-item-caption {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(26,24,20,0.75) 0%, transparent 100%);
+    padding: 16px 10px 7px;
+    font-family: var(--font-mono); font-size: 10px; color: rgba(245,242,237,0.9);
+    letter-spacing: 0.06em;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .gallery-item:hover .gallery-item-caption { opacity: 1; }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(26,24,20,0.92);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    padding: 24px;
+  }
+  .lightbox.open { opacity: 1; pointer-events: all; }
+  .lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 24px;
+    font-family: var(--font-mono); font-size: 12px; color: rgba(245,242,237,0.6);
+    letter-spacing: 0.12em; cursor: none; background: none; border: none;
+    transition: color 0.15s;
+  }
+  .lightbox-close:hover { color: #f5f2ed; }
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav>
+  <span class="nav-logo">PM // Portfolio</span>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-label">Performance Marketing Specialist</div>
+    <div class="hero-name">TRUONG<br><span>BAO TUE</span></div>
+    <div class="hero-title">Paid Media & Growth</div>
+  </div>
+
+  <div class="hero-right reveal">
+    <p class="hero-bio">
+      <strong>"Maybe stories are just data with a soul."</strong><br><br>
+      I'm a Performance Marketer with <strong>2+ years</strong> of experience who enjoys connecting the dots between what data says and the people behind it . My interest in problem-solving started in university, but I quickly realized that solving cases on paper wasn't enough. I wanted to see strategies play out in the real world, with real consequences. That gap pushed me toward performance marketing, where strategy is tested through execution.<br><br>
+      Two years in, I've come to believe that hands-on execution is what sharpens strategic thinking, and I'm looking to keep deepening that understanding across the full funnel.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">View Case Studies</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <span class="scroll-line"></span>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- Metrics Marquee -->
+<div class="metrics-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item"><span class="marquee-dot"></span> 2+ YEARS EXPERIENCE <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> 10+ PROJECT DONE <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> E-COM GROWTH <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> DATA-DRIVEN <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> ADVANCED ANALYTICS <span class="marquee-dot"></span></span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item"><span class="marquee-dot"></span> 2+ YEARS EXPERIENCE <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> 10+ PROJECT DONE <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> E-COM GROWTH <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> DATA-DRIVEN <span class="marquee-dot"></span></span>
+    <span class="marquee-item"><span class="marquee-dot"></span> ADVANCED ANALYTICS <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- Case Studies -->
+<section class="case-section" id="work">
+  <div class="section-tag">Case Studies</div>
+  <div class="section-title">Selected<br>Work</div>
+
+  <div class="case-grid reveal">
+
+    <!-- Case 1 -->
+    <div class="case-card">
+      <div class="case-num">
+        <div class="case-number">01</div>
+        <div class="case-industry">Health / FMCG</div>
+      </div>
+      <div class="case-body">
+        <button type="button" class="case-title" onclick="openModal('case3')">WheySinhVien: Health & Sports Nutrition</button>
+        <div class="case-period">Oct 2025 - Feb 2026</div>
+        <p class="case-desc">
+          Shifted a marketplace-heavy nutrition brand toward website revenue by improving UX, building Google Shopping infrastructure, and clarifying channel roles.
+        </p>
+        <div class="case-tags">
+          <span class="tag">Facebook Ads</span>
+          <span class="tag">Google Ads</span>
+          <span class="tag">Merchant Center</span>
+        </div>
+        <button class="case-view-btn" onclick="openModal('case3')">View Case Study <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="case-metrics">
+        <div class="metric-row">
+          <div class="metric-value">+73%</div>
+          <div class="metric-label">Revenue Surge</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">+82%</div>
+          <div class="metric-label">YoY Growth</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">3%</div>
+          <div class="metric-label">Google Ad Cost</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 2 -->
+    <div class="case-card">
+      <div class="case-num">
+        <div class="case-number">02</div>
+        <div class="case-industry">Online Education</div>
+      </div>
+      <div class="case-body">
+        <button type="button" class="case-title" onclick="openModal('case1')">PBS Group: E-commerce Academy</button>
+        <div class="case-period">Apr 2024 - May 2025</div>
+        <p class="case-desc">
+          Rebuilt the lead acquisition funnel during a product transition from Messenger Ads to LMS-based courses, improving lead quality and restoring tracking signal.
+        </p>
+        <div class="case-tags">
+          <span class="tag">Meta Ads</span>
+          <span class="tag">Google Ads</span>
+          <span class="tag">CAPI + GA4</span>
+        </div>
+        <button class="case-view-btn" onclick="openModal('case1')">View Case Study <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="case-metrics">
+        <div class="metric-row">
+          <div class="metric-value">-16%</div>
+          <div class="metric-label">CPL</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">60-70%</div>
+          <div class="metric-label">Spam Reduced</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">400M</div>
+          <div class="metric-label">Monthly Budget</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 3 -->
+    <div class="case-card">
+      <div class="case-num">
+        <div class="case-number">03</div>
+        <div class="case-industry">Fashion / Retail</div>
+      </div>
+      <div class="case-body">
+        <button type="button" class="case-title" onclick="openModal('case2')">Eldy: Women's Premium Office Fashion</button>
+        <div class="case-period">Feb 2025 - Jan 2026</div>
+        <p class="case-desc">
+          Diagnosed low-quality Facebook audiences, pivoted to TikTok live commerce, and rebuilt purchase data for a premium officewear brand.
+        </p>
+        <div class="case-tags">
+          <span class="tag">TikTok Ads</span>
+          <span class="tag">Facebook Ads</span>
+          <span class="tag">Live Commerce</span>
+        </div>
+        <button class="case-view-btn" onclick="openModal('case2')">View Case Study <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="case-metrics">
+        <div class="metric-row">
+          <div class="metric-value">+53%</div>
+          <div class="metric-label">Avg. Revenue</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">5%</div>
+          <div class="metric-label">Ad Cost Ratio</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">-77%</div>
+          <div class="metric-label">Cost Ratio</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 4 -->
+    <div class="case-card">
+      <div class="case-num">
+        <div class="case-number">04</div>
+        <div class="case-industry">Beauty</div>
+      </div>
+      <div class="case-body">
+        <button type="button" class="case-title" onclick="openModal('case4')">Lucenbase: Chinese Cosmetics Launch New Product</button>
+        <div class="case-period">Jan 2024 - Oct 2025</div>
+        <p class="case-desc">
+          Managed CPAS and TikTok performance for a multi-product launch, scaling a high-volume KOC creative pipeline while keeping ad cost below target.
+        </p>
+        <div class="case-tags">
+          <span class="tag">Facebook CPAS</span>
+          <span class="tag">TikTok Ads</span>
+          <span class="tag">KOC Assets</span>
+        </div>
+        <button class="case-view-btn" onclick="openModal('case4')">View Case Study <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="case-metrics">
+        <div class="metric-row">
+          <div class="metric-value">120K</div>
+          <div class="metric-label">Units Sold</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">Top 4</div>
+          <div class="metric-label">Cosmetics</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">&lt;6%</div>
+          <div class="metric-label">Ad Cost Ratio</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 5 -->
+    <div class="case-card">
+      <div class="case-num">
+        <div class="case-number">05</div>
+        <div class="case-industry">FMCG</div>
+      </div>
+      <div class="case-body">
+        <button type="button" class="case-title" onclick="openModal('case5')">Ynikala: FMCG Brand's Digital Market Entry</button>
+        <div class="case-period">Dec 2024 - Feb 2026</div>
+        <p class="case-desc">
+          Built a new FMCG brand's digital foundation from zero across TikTok Shop, Shopee, paid ads, KOC seeding, and marketplace promotion strategy.
+        </p>
+        <div class="case-tags">
+          <span class="tag">TikTok Shop</span>
+          <span class="tag">Shopee</span>
+          <span class="tag">FMCG Launch</span>
+        </div>
+        <button class="case-view-btn" onclick="openModal('case5')">View Case Study <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 7H13M8 2L13 7L8 12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+      <div class="case-metrics">
+        <div class="metric-row">
+          <div class="metric-value">2K</div>
+          <div class="metric-label">Products Sold</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">&lt;23%</div>
+          <div class="metric-label">Ad Cost Ratio</div>
+        </div>
+        <div class="metric-row">
+          <div class="metric-value">100M+</div>
+          <div class="metric-label">Net Revenue / Mo.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Experience -->
+<section class="exp-section" id="experience">
+  <div class="section-tag">Experience</div>
+  <div class="section-title">Where I've<br>Worked</div>
+
+  <div class="exp-timeline">
+    <div class="exp-item reveal">
+      <div class="exp-header">
+        <div class="exp-company">Cito Performance Agency</div>
+        <div class="exp-role">Performance Marketing Specialist</div>
+        <div class="exp-period">Jan 2024 - Feb 2026 </div>
+      </div>
+      <p class="exp-desc">
+        Managed 5–7 concurrent client projects across education, fashion, FMCG, health, and beauty, delivering full-funnel performance strategies from acquisition to conversion optimization.
+      </p>
+      <ul class="exp-achievements">
+        <li>Managed paid media campaigns across Meta, TikTok, Google Ads, and e-commerce marketplaces (Shopee, TikTokShop), overseeing full campaign lifecycle from planning to reporting</li>
+        <li>Handled monthly budgets of 300–400M VND across multiple accounts simultaneously</li>
+        <li>Implemented end-to-end tracking infrastructure (CAPI, Pixel, GA4, GTM) across multiple clients, improving signal quality and attribution accuracy</li>
+        <li>Set up marketing automation workflows via Ladipage (email sequences) and Botcake (Messenger segmentation)</li>
+        <li>Collaborated cross-functionally with creative, KOL/KOC, and e-commerce teams to scale creative production pipelines (1000+ assets) and optimize campaign performance</li>
+      </ul>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-header">
+        <div class="exp-company">Youth+ Academy | Non-profit organization</div>
+        <div class="exp-role">Content Writer</div>
+        <div class="exp-period">May 2021 - Nov 2021</div>
+      </div>
+      <ul class="exp-achievements">
+        <li>Developed and implemented weekly and monthly content strategy for the organization's Facebook page</li>
+        <li>Achieved 300% increase in Facebook page reach and 1,000+ new followers within 2 months</li>
+        <li>Organized the career orientation talkshow series "MINE" — 100+ participants per session</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+
+
+<!-- Education -->
+<section class="education-section" id="education">
+
+  <div class="section-tag">Academic</div>
+  <div class="section-title">Education &<br>Certificates</div>
+
+  <div class="education-wrapper reveal">
+
+    <!-- LEFT -->
+    <div class="education-card">
+      <h3 class="block-title">Education</h3>
+
+      <div class="edu-item">
+        <div class="edu-header">
+          <span class="edu-time">2020 - 2024</span>
+          <h3 class="edu-university">Thuongmai University</h3>
+        </div>
+
+        <p class="edu-degree">
+          Major: <strong>Brand Management</strong>
+        </p>
+
+        <ul class="edu-details">
+          <li>GPA: <strong>3.68 / 4.0</strong></li>
+          <li>Academic Scholarship: <strong>2 out of 4 years</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="certificate-card">
+      <h3 class="block-title">Certificates</h3>
+
+      <div class="cert-list">
+
+        <a href="https://skillshop.credential.net/b82ed6c1-9394-4aff-839f-ce9a5d1f9219#acc.lEMC4abU" target="_blank" class="cert-item">
+          <span class="tool-dot paid"></span>
+          <span>Google Analytics Certification</span>
+        </a>
+
+        <a href="https://www.coursera.org/account/accomplishments/verify/OEWUDA9O1L8D" target="_blank" class="cert-item">
+          <span class="tool-dot analytics"></span>
+          <span>Data Foundation Coursera Certificate</span>
+        </a>
+
+      
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CSS -->
+  <style>
+  
+    .education-wrapper{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 50px;
+    }
+
+    .education-card,
+    .certificate-card{
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 32px;
+      transition: 0.3s ease;
+    }
+
+    .education-card:hover,
+    .certificate-card:hover{
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .block-title{
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      color: #fff;
+    }
+
+    .edu-header{
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .edu-time{
+      font-size: 14px;
+      color: #999;
+    }
+
+    .edu-university{
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .edu-degree{
+      color: #ccc;
+      margin-bottom: 18px;
+    }
+
+    .edu-details{
+      padding-left: 18px;
+      color: #bbb;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cert-list{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cert-item{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #fff;
+      text-decoration: none;
+      transition: 0.3s ease;
+    }
+
+    .cert-item:hover{
+      background: rgba(255,255,255,0.06);
+      transform: translateX(4px);
+    }
+
+    .tool-dot{
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .tool-dot.paid{
+      background: #4ade80;
+    }
+
+    .tool-dot.analytics{
+      background: #60a5fa;
+    }
+
+    .tool-dot.platform{
+      background: #f59e0b;
+    }
+
+    @media (max-width: 768px){
+      .education-wrapper{
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+
+</section>
+
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+  <div class="section-tag">Contact</div>
+  <div class="section-title" style="margin-bottom: 48px;">LOOKING FORWARD TO<br>WORK WITH YOU!</div>
+
+  <div class="contact-links">
+    <a href="mailto:baotue.work@gmail.com" class="contact-link">
+      ✉ &nbsp;baotue.work@gmail.com
+    </a>
+    <a href="https://www.linkedin.com/in/baotue/" class="contact-link" target="_blank">
+      in &nbsp;LinkedIn
+    </a>
+    <a href="tel:+84978154149" class="contact-link">
+      ✆ &nbsp;+84 978154149
+    </a>
+  </div>
+
+  <a href="mailto:baotue.work@gmail.com" class="btn-primary" style="font-size: 14px; padding: 18px 48px;">
+    Send Me a Message
+  </a>
+</section>
+
+<!-- Footer -->
+<footer>
+  <span class="footer-text">Truong Bao Tue | Performance Marketing | 2026</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animateCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+
+  // Scroll reveals
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Nav background on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(245,242,237,0.97)';
+      nav.style.backdropFilter = 'blur(12px)';
+      nav.style.borderBottom = '1px solid rgba(26,24,20,0.08)';
+    } else {
+      nav.style.background = 'linear-gradient(to bottom, rgba(245,242,237,0.97) 0%, transparent 100%)';
+      nav.style.backdropFilter = 'blur(0px)';
+      nav.style.borderBottom = 'none';
+    }
+  });
+</script>
+
+
+
+<!-- ── Modal Backdrop ── -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal" id="caseModal" role="dialog" aria-modal="true">
+
+    <div class="modal-header">
+      <div class="modal-header-left">
+        <span class="modal-case-num" id="modalCaseNum">CASE — 01</span>
+        <span class="modal-badge" id="modalIndustry">[Industry]</span>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M1 1L11 11M11 1L1 11" stroke-width="1.4" stroke-linecap="round" class="x-line"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div id="modalContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const caseData = {
+  case1: {
+    id: 'case1', num: 'CASE — 02', industry: 'Online Education',
+    images: [
+      'Assets/img/PBS/Website PBS LMS.png',
+      'Assets/img/PBS/PBS lead 4:24 - 1:26.png',
+      'Assets/img/PBS/Tạo tệp LAL, exclude tệp Spam.png',
+      'Assets/img/PBS/PBS mess 4:24 - 1:26.png',
+      'Assets/img/PBS/GTM PBS .jpg',
+    ],
+    imageCaptions: [
+      'Website PBS LMS',
+      'Lead campaign performance',
+      'LAL and spam exclusion setup',
+      'Messenger campaign performance',
+      'GTM setup',
+    ],
+    title: 'PBS Group: E-commerce Academy',
+    subtitle: 'Rebuilding lead acquisition quality during a transition to an LMS-based course model.',
+    period: 'Apr 2024 - May 2025',
+    kpis: [
+      { val: '-16%', label: 'CPL' },
+      { val: '60-70%', label: 'Spam Reduced' },
+      { val: '300-400M', label: 'VND / Month' },
+    ],
+    challenge: 'PBS faced declining revenue and rising CPL amid market saturation, compounded by spam lead rates of 15-20% that distorted optimization signals. The business launched an LMS-based course model, requiring the acquisition funnel to be rebuilt around a new product while simultaneously improving lead quality.',
+    approach: [
+      { title: 'Chanel Pivot', body: 'Reallocated budget away from Messenger Ads toward Ladipage-based lead forms to improve lead intent and reduce cost per qualified lead.' },
+      { title: 'Spam filtering system', body: 'Reduced spam through blacklisting spam IDs on-site, uploading spam lists to Meta for exclusion, and building suppression audiences from historical spam data.' },
+      { title: 'Signal recovery', body: 'Implemented CAPI, Pixel, and GA4 to restore optimization signal quality after spam had distorted attribution.' },
+      { title: 'Budget scaling', body: 'Managed and scaled 300-400M VND/month across campaigns while maintaining stable performance through the product transition.' },
+      { title: 'Automation and launch support', body: 'Handled tracking issues, ad account stability, Ladipage email automation, Botcake Messenger segmentation, and Google Search/YouTube support for the LMS launch.' },
+    ],
+    results: [
+      { label: 'CPL Reduction', val: '-16%', delta: 'via A/B testing and landing page optimization', dir: 'up' },
+      { label: 'Spam Rate', val: '60-70%', delta: 'reduction in low-quality leads', dir: 'up' },
+      { label: 'Attribution', val: 'Full Funnel', delta: 'CAPI + Pixel + GA4 established', dir: 'up' },
+      { label: 'Budget Managed', val: '300-400M', delta: 'VND per month', dir: 'neutral' },
+    ],
+    platforms: ['Meta Ads', 'Google Ads', 'Google Search', 'YouTube Ads', 'Ladipage', 'Botcake', 'CAPI', 'Pixel', 'GA4'],
+  },
+  case2: {
+    id: 'case2', num: 'CASE — 03', industry: 'Fashion / Retail',
+    images: [
+      'Assets/img/Eldy/GMV tổng Eldy tăng sau khi điều chỉnh ads live.png',
+      'Assets/img/Eldy/Care ads Live GMV max Eldy.png',
+      'Assets/img/Eldy/Tiktok VSA Eldy T2-T7.2025 .png',
+      'Assets/img/Eldy/Phân tích GMV TikTok Eldy T2.25 - T1.26.png',
+      'Assets/img/Eldy/Lựa chọn sản phẩm AOV thấp để tạo lượt mua tốt hơn.png',
+    ],
+    imageCaptions: [
+      'Total GMV after live ads adjustment',
+      'Live GMV Max campaign care',
+      'TikTok VSA report',
+      'TikTok GMV analysis',
+      'Low AOV product selection for stronger purchase volume',
+    ],
+    title: 'Eldy: Women\'s Premium Office Fashion',
+    subtitle: 'Turning a premium fashion brand from inefficient Messenger volume into live-commerce-led growth.',
+    period: 'Feb 2025 - Jan 2026',
+    kpis: [
+      { val: '+53%', label: 'Avg. Revenue Growth' },
+      { val: '5%', label: 'Ad Cost Ratio' },
+      { val: '-77%', label: 'Cost Ratio Reduction' },
+    ],
+    challenge: 'Eldy products were priced 30-50% above the market average, creating a brand perception gap. Facebook Messenger ads generated volume but failed to convert, and ad costs were unsustainably high at 22% of revenue.',
+    approach: [
+      { title: 'Facebook diagnosis', body: 'Identified that historically purchased followers made lookalike audiences low quality and Messenger responses heavily bot/spam-driven.' },
+      { title: 'TikTok buyer pivot', body: 'Defined the core buyer as women aged 35-45 seeking sophisticated officewear, a high-consideration segment suited to live consultation.' },
+      { title: 'Live commerce restructuring', body: 'Updated showroom aesthetics, selected hosts matched to the demographic, and curated product selection using best-performing live session data.' },
+      { title: 'Creative repurposing', body: 'Used livestream clips as performance creatives, combined with edited product videos; analyzed top-performing content to define hooks, messaging, and product focus.' },
+      { title: 'Audience rebuild', body: 'Shifted to more affordable products on Facebook Ads to lower the barrier to purchase, generate higher-quality conversion data, and rebuild lookalike audiences.' },
+    ],
+    results: [
+      { label: 'Revenue Growth', val: '+53%', delta: 'average growth sustained for 7 months', dir: 'up' },
+      { label: 'Ad Cost Ratio', val: '22% -> 5%', delta: '77% reduction', dir: 'up' },
+      { label: 'Primary Channel', val: 'TikTok Live', delta: 'became the main revenue channel', dir: 'up' },
+      { label: 'Facebook Quality', val: 'Rebuilt', delta: 'clean lookalike audience sourcing', dir: 'up' },
+    ],
+    platforms: ['TikTok Ads', 'Facebook Ads', 'TikTok Live', 'Messenger Ads', 'Lookalike Audiences'],
+  },
+  case3: {
+    id: 'case3', num: 'CASE — 01', industry: 'Health / FMCG',
+    images: [
+      'Assets/img/Wheysinhvien/Revenue Website WSV YoY.png',
+      'Assets/img/Wheysinhvien/WSV youtube report.png',
+      'Assets/img/Wheysinhvien/GA4 giao dịch mua - WSV.png',
+      'Assets/img/Wheysinhvien/Khắc phục vấn đề GMC.png',
+      'Assets/img/Wheysinhvien/WSV - đề xuất tối ưu website .jpg',
+      'Assets/img/Wheysinhvien/Looker WSV T10-T1.26.png',
+      'Assets/img/Wheysinhvien/WSV facebook T10 - T1.26.png',
+      'Assets/img/Wheysinhvien/GA4 report WSV.png',
+      'Assets/img/Wheysinhvien/Revenue Website WSV vs. 5 months previous .png',
+      'Assets/img/Wheysinhvien/WSV - GTM set up.jpg',
+    ],
+    imageCaptions: [
+      'Website revenue YoY',
+      'YouTube Ads report',
+      'GA4 purchase tracking',
+      'Google Merchant Center issue fix',
+      'Website optimization proposal',
+      'Looker performance dashboard',
+      'Facebook campaign report',
+      'GA4 report',
+      'Website revenue vs previous 5 months',
+      'GTM setup',
+    ],
+    title: 'WheySinhVien: Health & Sports Nutrition',
+    subtitle: 'Moving an established marketplace brand toward website-led revenue with clearer paid media roles.',
+    period: 'Oct 2025 - Feb 2026',
+    kpis: [
+      { val: '+73%', label: 'Revenue Surge' },
+      { val: '+82%', label: 'YoY Growth' },
+      { val: '3%', label: 'Google Ad Cost' },
+    ],
+    challenge: 'Despite an established brand and strong e-commerce presence, rising platform fees pushed the business toward website-driven revenue with a target ad cost ratio of 10%. The website was under-optimized and sales relied heavily on returning customers, requiring expansion into new user acquisition.',
+    approach: [
+      { title: 'Channel role strategy', body: 'Framed Facebook as demand creation and Google as intent capture, making each channel accountable to a clear job.' },
+      { title: 'Website optimization', body: 'Improved Sapo theme basics including banners, colors, and product pages to build credibility before scaling ads.' },
+      { title: 'Google Shopping foundation', body: 'Set up Google Merchant Center from scratch, handled errors and appeals, and structured PMax/Search campaigns:<br>&bull; All Products (PMax): maintain visibility on Google Shopping with controlled budget<br>&bull; Category (Search Ads): capture high-intent demand and reach new buyers searching by category (e.g. whey protein, vitamins)<br>&bull; Exclusive SKUs (PMax): maximize conversion leveraging pricing advantage' },
+      { title: 'Facebook demand layer', body: 'Ran daily Messenger ads to consult buyers directly, send product links, and feed qualified traffic into Google audience signals.' },
+      { title: 'Tracking and analytics', body: 'Built GA4, GTM, and Search Console visibility, using AI-assisted code injection to work around Sapo theme limitations.' },
+    ],
+    results: [
+      { label: 'Revenue Surge', val: '+73%', delta: 'over the preceding 5-month period', dir: 'up' },
+      { label: 'YoY Growth', val: '+82%', delta: 'through non-seasonal growth', dir: 'up' },
+      { label: 'Facebook Ad Cost', val: '31% -> 21%', delta: 'improved channel efficiency', dir: 'up' },
+      { label: 'Google Ad Cost', val: '3%', delta: 'of revenue maintained', dir: 'up' },
+      { label: 'Analytics', val: 'Full Visibility', delta: 'first-time cross-channel visibility', dir: 'up' },
+    ],
+    platforms: ['Facebook Ads', 'Google Search', 'PMax', 'Google Merchant Center', 'GA4', 'GTM', 'Search Console', 'Sapo'],
+  },
+  case4: {
+    id: 'case4', num: 'CASE — 04', industry: 'Beauty',
+    images: [
+      'Assets/img/Lucenbase/120k+ Units Sold Lucenbase.png',
+      'Assets/img/Lucenbase/GMV Max Lucenbase 2025.png',
+      'Assets/img/Lucenbase/Campaign Lucenbase 2025.png',
+    ],
+    imageCaptions: [
+      '120K+ units sold',
+      'GMV Max performance',
+      '2025 campaign proof',
+    ],
+    title: 'Lucenbase: Chinese Cosmetics Launch in Vietnam',
+    subtitle: 'Scaling multi-product beauty launches with CPAS, TikTok Ads, and a high-volume KOC creative engine.',
+    period: 'Jan 2024 - Oct 2025',
+    kpis: [
+      { val: '120K', label: 'Cushion Units' },
+      { val: 'Top 4', label: 'Cosmetics Rank' },
+      { val: '&lt;5%', label: 'Ad Cost Ratio' },
+    ],
+    challenge: 'Lucenbase was launching multiple new products including Cushion, Body Cream, and the 377 line, requiring fast creative validation and efficient ad scaling during highly competitive sales periods.',
+    approach: [
+      { title: 'Multi-channel performance ownership', body: 'Managed Facebook CPAS and TikTok Ads while maintaining an ad cost ratio below 5% throughout the campaign.' },
+      { title: 'Creative scaling & optimization', body: 'Managed and optimized a 1000+ asset KOC pipeline, identifying and scaling high-performing creatives.' },
+      { title: 'Promotion operations', body: 'Handled mini sales, mega sales, and flash sales to maximize visibility and conversion.' },
+      { title: 'Launch coordination', body: 'Collaborated with cross-functional teams to execute Cushion, Body Cream, and 377 launch phases.' },
+      { title: 'Livestream support', body: 'Supported KOL livestream operations by setting deal structures and managing live ad performance.' },
+    ],
+    results: [
+      { label: 'Cushion Units Sold', val: '120,000+', delta: 'by Jan 2026', dir: 'up' },
+      { label: 'Category Ranking', val: 'Top 4', delta: 'Cosmetics category on platform (T1-T2/2025)', dir: 'up' },
+      { label: 'Ad Cost Ratio', val: '&lt;6%', delta: 'held across channels throughout launch', dir: 'up' },
+    ],
+    platforms: ['Facebook CPAS', 'TikTok Ads', 'KOC Assets', 'KOL Livestream', 'Flash Sales'],
+  },
+  case5: {
+    id: 'case5', num: 'CASE — 05', industry: 'FMCG',
+    images: [
+      'Assets/img/Ynikala /Yni - KOC freecast .png',
+      'Assets/img/Ynikala /promotion tiktok shopee Yni.jpg',
+      'Assets/img/Ynikala /Yni - aff.png',
+      'Assets/img/Ynikala /Yni - GMV max T2.25-T1.26.png',
+      'Assets/img/Ynikala /Yni - build shop.jpg',
+    ],
+    imageCaptions: [
+      'KOC freecast activity',
+      'TikTok and Shopee promotion',
+      'Affiliate setup',
+      'GMV Max performance',
+      'Shop build proof',
+    ],
+    title: 'Ynikala: FMCG Brand\'s Digital Market Entry',
+    subtitle: 'Building a new FMCG brand from zero into a sustained e-commerce revenue engine.',
+    period: 'Dec 2024 - Feb 2026',
+    kpis: [
+      { val: '2K', label: 'Products Sold' },
+      { val: '&lt;23%', label: 'Ad Cost Ratio' },
+      { val: '100M+', label: 'Net Revenue / Mo.' },
+    ],
+    challenge: 'Ynikala was a new FMCG brand entering a competitive market against established players and high-volume marketplace sellers, with no online presence, no customer trust, a broad product portfolio without a clear hero product, and a limited budget.',
+    approach: [
+      { title: 'Phase 1: Foundation and demand', body: 'Focused on one hero product; built TikTok Shop, Shopee, and ads foundations.' },
+      { title: 'Trust building', body: 'Invested in branding & awareness via KOC booking and seeding activity to compensate for low initial trust' },
+      { title: 'Phase 2: Expansion and monetization', body: 'Expanded into home fragrance for a broader younger audience and refined scent profile and packaging to increase appeal.' },
+      { title: 'Upsell and cross-sell system', body: 'Designed category connections that encouraged basket expansion across the product range.' },
+      { title: 'Promotion calendar', body: 'Implemented a monthly promotion calendar aligned with marketplace platform campaigns.' },
+    ],
+    results: [
+      { label: 'Products Sold', val: '2,000', delta: 'first 3 months from a zero base', dir: 'up' },
+      { label: 'Ad Cost Ratio', val: '&lt;23%', delta: 'maintained across all platforms', dir: 'up' },
+      { label: 'Net Revenue', val: '100M+', delta: 'VND/month after returns and cancellations by month 9', dir: 'up' },
+      { label: 'Sustainability', val: 'Sep 2025+', delta: 'monthly revenue sustained onward', dir: 'up' },
+    ],
+    platforms: ['TikTok Shop', 'Shopee', 'TikTok Ads', 'Facebook Ads', 'KOC Seeding', 'Marketplace Promotions'],
+  },
+};
+
+function buildModalContent(d) {
+  const kpiHTML = d.kpis.map(k => `
+    <div class="modal-kpi-item">
+      <div class="modal-kpi-val">${k.val}</div>
+      <div class="modal-kpi-lbl">${k.label}</div>
+    </div>`).join('');
+
+  const stepsHTML = d.approach.map((s, i) => `
+    <li class="modal-step">
+      <span class="modal-step-num">0${i+1}</span>
+      <span class="modal-step-text"><strong>${s.title}</strong><br>${s.body}</span>
+    </li>`).join('');
+
+  const resultsHTML = d.results.map(r => `
+    <div class="modal-result">
+      <div class="modal-result-label">${r.label}</div>
+      <div class="modal-result-val">${r.val}</div>
+      <div class="modal-result-delta ${r.dir==='up'?'delta-up':r.dir==='down'?'delta-down':'delta-neutral'}">${r.delta}</div>
+    </div>`).join('');
+
+  const platformsHTML = d.platforms.map(p => `<span class="platform-tag">${p}</span>`).join('');
+
+  // Build gallery from case proof images
+  const imgs = (d.images && d.images.length) ? d.images : [];
+  const captions = d.imageCaptions || [];
+  let galleryHTML = '';
+  for (let i = 0; i < imgs.length; i++) {
+    galleryHTML += `
+      <div class="gallery-item" onclick="openLightbox('${imgs[i]}')">
+        <img src="${imgs[i]}" alt="${captions[i] || ''}">
+        <div class="gallery-item-caption">${captions[i] || ''}</div>
+      </div>`;
+  }
+
+  return `
+    <div class="modal-hero">
+      <div>
+        <div class="modal-title">${d.title}</div>
+        <div class="modal-subtitle">${d.subtitle}</div>
+        <div class="modal-period">${d.period}</div>
+      </div>
+      <div class="modal-kpi-strip">${kpiHTML}</div>
+    </div>
+
+    <div class="modal-content">
+      <div class="modal-col">
+        <div class="modal-section">
+          <div class="modal-section-label">Challenge</div>
+          <div class="modal-text">${d.challenge}</div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-label">Approach</div>
+          <ul class="modal-steps">${stepsHTML}</ul>
+        </div>
+      </div>
+      <div class="modal-col">
+        <div class="modal-section">
+          <div class="modal-section-label">Platforms</div>
+          <div class="modal-platforms">${platformsHTML}</div>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-label">Results</div>
+          <div class="modal-results">${resultsHTML}</div>
+        </div>
+        <div class="modal-gallery-section">
+          <div class="modal-gallery-label">Campaign Screenshots & Proof</div>
+          <div class="gallery-grid" id="gallery-${d.id}">${galleryHTML}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function openModal(id) {
+  const d = caseData[id];
+  if (!d) return;
+  document.getElementById('modalCaseNum').textContent = d.num;
+  document.getElementById('modalIndustry').textContent = d.industry;
+  document.getElementById('modalContent').innerHTML = buildModalContent(d);
+  document.getElementById('modalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('caseModal').scrollTop = 0;
+  document.querySelector('.modal-body').scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">ESC / CLOSE ×</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+// ── Lightbox
+function openLightbox(src) {
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightboxImg').src = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLightbox(); } });
+</script>
+
+</body>
+</html>
