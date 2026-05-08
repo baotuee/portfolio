@@ -1683,6 +1683,14 @@ function buildModalContent(d) {
 function openModal(id) {
   const d = caseData[id];
   if (!d) return;
+  
+  window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'case_study_open',
+  case_id: d.id,
+  case_title: d.title,
+  case_industry: d.industry
+});
   document.getElementById('modalCaseNum').textContent = d.num;
   document.getElementById('modalIndustry').textContent = d.industry;
   document.getElementById('modalContent').innerHTML = buildModalContent(d);
